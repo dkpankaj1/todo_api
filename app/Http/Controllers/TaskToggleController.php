@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\LogCompletedTask;
 use App\Models\TodoTask;
 use App\Traits\ApiResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -27,6 +28,10 @@ class TaskToggleController extends Controller
 
             $newStatus = $task->is_complete ? 0 : 1;
             $task->update(['is_complete' => $newStatus]);
+
+            if ($newStatus) {
+                LogCompletedTask::dispatch($task->fresh());
+            }
 
             return $this->sendSuccess(['task' => $task->fresh()], 'Task status toggled successfully.');
         } catch (ModelNotFoundException $e) {
