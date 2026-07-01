@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\TodoTask;
+use App\Models\ToDoTask;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
@@ -15,7 +15,7 @@ class LogCompletedTask implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        public TodoTask $task,
+        public ToDoTask $task,
     ) {}
 
     /**
