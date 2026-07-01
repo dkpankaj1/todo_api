@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ToDoTaskResource;
-use App\Models\ToDoTask;
+use App\Models\TodoTask;
 use App\Traits\ApiResponse;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -21,7 +21,7 @@ class ToDoTaskController extends Controller
      */
     public function index()
     {
-        $tasks = ToDoTask::whereNull('parent_id')
+        $tasks = TodoTask::whereNull('parent_id')
             ->where('user_id', Auth::id())
             ->with('subTask')
             ->get();
@@ -47,13 +47,13 @@ class ToDoTaskController extends Controller
 
             // If parent_id is provided, verify the parent belongs to the authenticated user
             if ($request->filled('parent_id')) {
-                $parent = ToDoTask::findOrFail($request->parent_id);
+                $parent = TodoTask::findOrFail($request->parent_id);
                 if ($parent->user_id !== Auth::id()) {
                     throw new AuthorizationException('You are not authorized to add subtasks to this task.');
                 }
             }
 
-            $task = ToDoTask::create([
+            $task = TodoTask::create([
                 'title'     => $request->title,
                 'parent_id' => $request->parent_id,
                 'user_id'   => Auth::id(),
@@ -78,7 +78,7 @@ class ToDoTaskController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ToDoTask $todos)
+    public function show(TodoTask $todos)
     {
         try {
             if ($todos->user_id !== Auth::id()) {
@@ -99,7 +99,7 @@ class ToDoTaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ToDoTask $todos)
+    public function update(Request $request, TodoTask $todos)
     {
         try {
             if ($todos->user_id !== Auth::id()) {
@@ -127,7 +127,7 @@ class ToDoTaskController extends Controller
 
             // If parent_id is provided, verify the parent belongs to the authenticated user
             if ($request->filled('parent_id')) {
-                $parent = ToDoTask::findOrFail($request->parent_id);
+                $parent = TodoTask::findOrFail($request->parent_id);
                 if ($parent->user_id !== Auth::id()) {
                     throw new AuthorizationException('You are not authorized to assign this parent task.');
                 }
@@ -152,7 +152,7 @@ class ToDoTaskController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ToDoTask $todos)
+    public function destroy(TodoTask $todos)
     {
         try {
             if ($todos->user_id !== Auth::id()) {
