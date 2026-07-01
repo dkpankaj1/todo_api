@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\LogCompletedTask;
-use App\Models\TodoTask;
+use App\Models\ToDoTask;
 use App\Traits\ApiResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -18,7 +18,7 @@ class TaskToggleController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(TodoTask $task)
+    public function __invoke(ToDoTask $task)
     {
         try {
             // Ensure the authenticated user owns this task
